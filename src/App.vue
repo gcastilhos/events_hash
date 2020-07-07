@@ -1,57 +1,56 @@
 <template>
   <div id="app">
-    <div class="table">
-      <div class="head">
-        <div class="cell header big_font black">
-            <span>DAILY EVENT TABLE - BATCH {{ batch }}</span>
-        </div>
-        <cell-separator></cell-separator>
-        <div class="cell big_font red">
-          <span>EVENT HASHING</span>
-        </div>
-      </div>
-      <div class="head">
-        <div class="cell header dark_blue">
-          <div v-for="(item, index) in header" :key="'head_' + index" class="cell">
+    <table>
+      <thead>
+        <tr>
+          <th class="header big-font black" colspan="13">
+              <span>DAILY EVENT TABLE - BATCH {{ batch }}</span>
+          </th>
+          <th><cell-separator></cell-separator></th>
+          <th class="big-font red">
+            <span>EVENT HASHING</span>
+          </th>
+        </tr>
+        <tr>
+          <th v-for="(item, index) in header" :key="'head_' + index" class="header dark-blue">
             {{ item }}
-          </div>
-        </div>
-        <cell-separator></cell-separator>
-        <cell-separator></cell-separator>
-      </div>
-      <div v-for="(record, rowIndex) in records" :key="'rec_' + rowIndex" class="row">
-        <div class="cell record original dark_blue">
-          <div v-for="(item, index) in record" :key="'val_' + index" class="cell text mono" v-html="padding(item, index)">
-          </div>
-        </div>
-        <cell-separator></cell-separator>
-        <div class="cell record dark_blue">
-          <div class="text hash">
-            {{ record | recordAsString | encode }}
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <cell-separator></cell-separator>
-        <cell-separator></cell-separator>
-        <div class="cell final_hash">
-          <div class="row">
-            <div class="cell no_lateral_padding">
-              <div class="text light_blue note">
-                 <span>Block HASH for each 100 events</span>
-              </div>
+          </th>
+          <th><cell-separator></cell-separator></th>
+          <th><cell-separator></cell-separator></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(record, rowIndex) in records" :key="'rec_' + rowIndex" class="row">
+          <td v-for="(item, index) in record" :key="'val_' + index" class="record original dark-blue text mono" v-html="item">
+          </td>
+          <td><cell-separator></cell-separator></td>
+          <td class="record dark-blue">
+            <div class="text hash">
+              {{ record | recordAsString | encode }}
             </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="13"><cell-separator></cell-separator></td>
+          <td><cell-separator></cell-separator></td>
+          <td class="final-hash">
+            <div class="text note no-lateral-padding">
+              <span>Block HASH for each 100 events</span>
             </div>
-            <div class="row yellow">
-              <div class="cell">
-                <div class="text hash">
-                  {{ finalHash }}
-                </div>
-              </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="13"><cell-separator></cell-separator></td>
+          <td><cell-separator></cell-separator></td>
+          <td class="yellow final-hash">
+            <div class="text hash">
+              {{ finalHash }}
             </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -135,67 +134,39 @@ export default {
 
 <style>
 /**
- * Table-like DIVs
+ * app div
+ */
+#app {
+  font-size: 8pt;
+  font-family: Arial, Helvetica, Sans-serif;
+}
+
+/**
+ * Table
  */
 
-div {
-    font-size: 8pt;
-    font-family: Arial, Helvetica, Sans-serif;
-}
-
-div.table {
-    display: table;
+table {
     padding: 50px;
-    table-layout: fixed;
+    border-spacing: 0;
 }
 
-div.head {
-    display: table-header-group;
-}
-
-div.head div.cell.header {
+.header {
     font-weight: bold;
     word-wrap: break-word;
     border-bottom: 1px black solid;
 }
 
-div.row {
-    display: table-row;
-}
-
-
-div.body {
-    display: table-row-group;
-}
-
-div.cell {
-    display: table-cell;
+td, th {
     padding: 5px 10px;
 }
 
-.dark_blue {
+.dark-blue {
     background-color: #038cfc;
 }
 
-div.cell.record.original {
-    width: 600px;
+.record.original {
+    text-align: right;
     white-space: nowrap;
-}
-
-div.cell.separator {
-    width:75px;
-}
-
-/**
- *
- */
-
-div#totals.table {
-    padding: 0;
-}
-
-div#totals.table .row .cell {
-    font-size: 12pt;
 }
 
 /**
@@ -213,13 +184,13 @@ div.text.hash {
     text-align: center;
 }
 
-div.final_hash {
+.final-hash {
     background-color: lightBlue;
-    padding: 0;
+    padding: 5px 0;
     text-align: center;
 }
 
-div.final_hash div.row.yellow div.cell {
+.final-hash.yellow {
     padding: 10px;
 }
 
@@ -236,14 +207,14 @@ div.note {
  * Generic styles
  */
 
-.big_font {
+.big-font {
     font-size: 24pt;
     font-family: Arial, Helvetica, Sans-serif;
     font-weight: bold;
     text-align: center;
 }
 
-h4.big_font {
+h4.big-font {
     font-size: 18pt;
     margin-top:20px;
     margin-bottom: 20px;
@@ -264,11 +235,7 @@ h5 {
     background-color: #e8ebf5;
 }
 
-.border_lightBlue {
-    border: 1px solid lightBlue;
-}
-
-.light_blue {
+.light-blue {
     background-color: lightBlue;
 }
 
@@ -276,79 +243,16 @@ h5 {
     background-color: yellow;
 }
 
-.header {
-    font-weight: bold;
-}
-
 .mono {
     font-family: "Lucida Console", Monaco, Courier, monospace;
-}
-
-.no_space_break {
-    white-space: nowrap;
 }
 
 .text_left {
     text-align: left;
 }
 
-.colspan {
-    column-span: all;
-}
-
-.red_border {
-    border: 1px red solid;
-}
-
-.red_bottom_border {
-    border-bottom: 1px red solid;
-}
-
-.red_left_border {
-    border-left: 1px red solid;
-}
-
-.red_right_border {
-    border-right: 1px red solid;
-}
-
-.bottom_border {
-    border-bottom: 1px black solid;
-}
-
-div.no_lateral_padding {
+div.no-lateral-padding {
     padding-right: 0;
     padding-left: 0;
-}
-
-/**
- * Events categorization
- */
-
-table.categ, table.totals {
-    border-collapse: separate;
-}
-
-table.categ {
-    border-spacing: 0px 7px;
-}
-
-table.totals {
-    border-spacing: 5px;
-}
-
-table.categ td, table.totals td, table.categ th {
-    padding: 5px;
-    white-space: nowrap;
-}
-
-table.categ tr.red_line {
-    outline-width: 2px;
-    outline-color: red;
-    outline-style: outset;
-}
-
-table.totals th {
-    padding: 5px;
 }
 </style>

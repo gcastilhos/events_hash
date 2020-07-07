@@ -1,5 +1,5 @@
 <template>
-  <div class="cell separator" v-html="space"></div>
+  <div class="separator" v-html="space"></div>
 </template>
 
 <script>
@@ -12,5 +12,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.separator {
+  width: 25px;
+}
 </style>
