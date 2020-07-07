@@ -3,7 +3,7 @@
     <table>
       <thead>
         <tr>
-          <th class="header big-font black" colspan="13">
+          <th class="header big-font black" colspan="15">
               <span>DAILY EVENT TABLE - BATCH {{ batch }}</span>
           </th>
           <th><cell-separator></cell-separator></th>
@@ -31,7 +31,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="13"><cell-separator></cell-separator></td>
+          <td colspan="15"><cell-separator></cell-separator></td>
           <td><cell-separator></cell-separator></td>
           <td class="final-hash">
             <div class="text note no-lateral-padding">
@@ -40,7 +40,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="13"><cell-separator></cell-separator></td>
+          <td colspan="15"><cell-separator></cell-separator></td>
           <td><cell-separator></cell-separator></td>
           <td class="yellow final-hash">
             <div class="text hash">
@@ -74,6 +74,8 @@ var encode = function(text) {
   return text;
 };
 
+const DATA_API_URI = "/events";
+
 export default {
   router,
   data: function () {
@@ -81,8 +83,7 @@ export default {
       records: [],
       header: [],
       finalHash: '',
-      batch: 1,
-      padSize: [6, 12, 18, 4, 15, 15, 10, 5, 6, 6, 5, 5, 5, 5]
+      batch: 1
     }
   },
   components: {
@@ -95,20 +96,22 @@ export default {
     },
   },
   methods: {
-    padding: function(value, index) {
-      var text = value;
-      for (var i = 0; i < this.padSize[index] - value.toString().length; ++i) {
-        text = "&nbsp;" + text;
+    getData: async function() {
+      var data;
+      try { 
+        let response = await axios.get(DATA_API_URI);
+        data = response.data;
+        console.log("Response:" + data.data);
+        console.log("Response:" + data.columns);
+      } catch (error) {
+        console.error("Response: " + error);
+        data = {data: [new Array(14).fill(0)]};
       }
-      return text;
-    },
-    getData: async function(batch) {
-      let response = await axios.get("./data/records_" + batch + ".json");
-      let data = response.data;
-      this.records.splice(data.data.length);
-      data.data.forEach((rec, index) => this.$set(this.records, index, rec.slice(1)));
-      this.header.splice(data.columns.length - 1);
-      this.header = data.columns.slice(1);
+      this.records.push(data.data[0]);
+      //this.records.splice(data.data.length);
+      //data.data.forEach((rec, index) => this.$set(this.records, index, rec));
+      //this.header.splice(data.columns.length);
+      this.header = data.columns;
       this.encodeAll();
     },
     encodeAll: function() {
@@ -120,7 +123,6 @@ export default {
     },
   },
   mounted: function() {
-    this.batch = this.$route.query.batch !== undefined ? this.$route.query.batch : 1;
     this.getData(this.batch);
   },
   created: function() {
@@ -214,25 +216,8 @@ div.note {
     text-align: center;
 }
 
-h4.big-font {
-    font-size: 18pt;
-    margin-top:20px;
-    margin-bottom: 20px;
-}
-
-h5 {
-    font-size: 16pt;
-    font-weight: bold;
-    margin: 5px 0;
-    text-align: center;
-}
-
 .red {
     color: red;
-}
-
-.grey {
-    background-color: #e8ebf5;
 }
 
 .light-blue {
@@ -245,10 +230,6 @@ h5 {
 
 .mono {
     font-family: "Lucida Console", Monaco, Courier, monospace;
-}
-
-.text_left {
-    text-align: left;
 }
 
 div.no-lateral-padding {
