@@ -35,7 +35,7 @@
           <td><cell-separator></cell-separator></td>
           <td class="final-hash">
             <div class="text note no-lateral-padding">
-              <span>Block HASH for each 100 events</span>
+              <span>Block HASH for {{numberOfEvents}}</span>
             </div>
           </td>
         </tr>
@@ -121,15 +121,23 @@ export default {
       this.finalHash = encode(finalHash);
     },
   },
+  computed: {
+    numberOfEvents: function() {
+      if (this.batch == 1) {
+        return "1 event";
+    }
+      return "each " + this.batch + " events"
+    }
+  },
   mounted: function() {
     this.getData(this.batch);
   },
   created: function() {
     setInterval(function() {
       let next_batch;
-      if (this.batch === 10) {
+      if (this.batch === 100) {
         next_batch = 1;
-        this.records.splice(0, 10);
+        this.records.splice(0, 100);
       } else {
         next_batch = this.batch + 1;
       }
