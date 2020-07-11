@@ -60,6 +60,7 @@ import CellSeparator from './components/CellSeparator.vue'
 import VueRouter from 'vue-router';
 import sha256 from 'sha256';
 import axios from 'axios';
+import mock_data from '@/mock_data.js'
 Vue.use(VueRouter);
 
 var router = new VueRouter({
@@ -96,21 +97,19 @@ export default {
     },
   },
   methods: {
-    getData: async function() {
+    getData: async function(next_batch) {
       var data;
-      try { 
+      try {
         let response = await axios.get(DATA_API_URI);
         data = response.data;
-        console.log("Response:" + data.data);
-        console.log("Response:" + data.columns);
+        console.log("Data:" + data.data);
+        console.log("Columns:" + data.columns);
       } catch (error) {
-        console.error("Response: " + error);
-        data = {data: [new Array(14).fill(0)]};
+        console.error("Error: " + error);
+        data = mock_data;
       }
       this.records.push(data.data[0]);
-      //this.records.splice(data.data.length);
-      //data.data.forEach((rec, index) => this.$set(this.records, index, rec));
-      //this.header.splice(data.columns.length);
+      this.batch = next_batch;
       this.header = data.columns;
       this.encodeAll();
     },
@@ -127,9 +126,15 @@ export default {
   },
   created: function() {
     setInterval(function() {
-      this.batch = this.batch === 100 ? 1 : this.batch + 1;
-      this.getData(this.batch);
-    }.bind(this), 60000);
+      let next_batch;
+      if (this.batch === 10) {
+        next_batch = 1;
+        this.records.splice(0, 10);
+      } else {
+        next_batch = this.batch + 1;
+      }
+      this.getData(next_batch);
+    }.bind(this), 10000);
   }
 }
 </script>
