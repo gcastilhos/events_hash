@@ -142,6 +142,7 @@ export default {
         next_batch = this.batch + 1;
       }
       this.getData(next_batch);
+      let interval = process.env.DELAY || 10000;
     }.bind(this), 10000);
   }
 }
