@@ -84,7 +84,8 @@ export default {
       records: [],
       header: [],
       finalHash: '',
-      batch: 1
+      batch: 1,
+      interval: process.env.VUE_APP_DELAY || 10000
     }
   },
   components: {
@@ -133,7 +134,6 @@ export default {
     this.getData(this.batch);
   },
   created: function() {
-    let interval = process.env.DELAY || 10000;
     setInterval(function() {
       let next_batch;
       if (this.batch === 100) {
@@ -143,7 +143,7 @@ export default {
         next_batch = this.batch + 1;
       }
       this.getData(next_batch);
-    }.bind(this), interval);
+    }.bind(this), this.interval);
   }
 }
 </script>
