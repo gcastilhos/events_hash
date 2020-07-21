@@ -27,14 +27,23 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 To set the delay time between requests to the events server, in milliseconds
 ```
-DELAY=#####
+VUE_APP_DELAY=#####
 ```
 
 > Example:  
-  DELAY=10000 # Setting a 10-second delay between requests
+  VUE_APP_DELAY=10000 # Setting a 10-second delay between requests
+
+The files to place the environment variables are
+
+* .env.production
+* .env.staging
+* .env.local
+
+Along with that, also the `NODE_ENV` variable should be set in both staging and production environments.
 
 On `Heroku`
 ```
-heroku config:set DELAY=#### --app <app name>
+heroku config:set NODE_ENV=staging --app blockchainevents-staging
+heroku config:set NODE_ENV=production --app blockchainevents
 ```
 
