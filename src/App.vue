@@ -133,6 +133,7 @@ export default {
     this.getData(this.batch);
   },
   created: function() {
+    let interval = process.env.DELAY || 10000;
     setInterval(function() {
       let next_batch;
       if (this.batch === 100) {
@@ -142,7 +143,6 @@ export default {
         next_batch = this.batch + 1;
       }
       this.getData(next_batch);
-      let interval = process.env.DELAY || 10000;
     }.bind(this), interval);
   }
 }
