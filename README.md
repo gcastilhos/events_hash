@@ -41,9 +41,30 @@ The files to place the environment variables are
 
 Along with that, also the `NODE_ENV` variable should be set in both staging and production environments.
 
-On `Heroku`
+On `Heroku` (NOTE: if not set, assumed development)
 ```
 heroku config:set NODE_ENV=staging --app blockchainevents-staging
 heroku config:set NODE_ENV=production --app blockchainevents
 ```
 
+### The static.json File
+
+For static applications, a `static.json` file must be added, following the format
+```
+{
+  "root": "dist",
+  "clean_urls": true,
+  "routes": {
+    "/**": "index.html"
+  }
+}
+```
+
+Also, ensure that these buildpacks are installed (check the [deployment page][1] for more details)
+
+```
+heroku buildpacks:add heroku/nodejs
+heroku buildpacks:add https://github.com/heroku/heroku-buildpack-static
+```
+
+[1]: https://cli.vuejs.org/guide/deployment.html#heroku
