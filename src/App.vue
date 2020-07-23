@@ -101,7 +101,7 @@ export default {
     getData: async function(next_batch) {
       var data;
       try {
-        let response = await axios.get(DATA_API_URI);
+        let response = await axios.get(DATA_API_URI, {timeout: 10000});
         data = response.data;
         console.log("Data:" + data.data);
         console.log("Columns:" + data.columns);
