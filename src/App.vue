@@ -63,6 +63,9 @@ import axios from 'axios';
 import mock_data from '@/mock_data.js'
 Vue.use(VueRouter);
 
+const DATA_API_URI = process.env.VUE_APP_DATA_API_URI || "/events";
+const HEADERS = JSON.parse(process.env.VUE_APP_HEADERS)
+
 var router = new VueRouter({
   mode: 'history',
   routes: []
@@ -75,7 +78,6 @@ var encode = function(text) {
   return text;
 };
 
-const DATA_API_URI = "/events";
 
 export default {
   router,
@@ -85,7 +87,7 @@ export default {
       header: [],
       finalHash: '',
       batch: 1,
-      interval: process.env.VUE_APP_DELAY || 10000
+      interval: parseInt(process.env.VUE_APP_DELAY || 10000)
     }
   },
   components: {
@@ -101,7 +103,7 @@ export default {
     getData: async function(next_batch) {
       var data;
       try {
-        let response = await axios.get(DATA_API_URI, {timeout: 10000});
+        let response = await axios.get(DATA_API_URI, {timeout: 10000, headers: HEADERS});
         data = response.data;
         console.log("Data:" + data.data);
         console.log("Columns:" + data.columns);
@@ -155,6 +157,10 @@ export default {
 #app {
   font-size: 8pt;
   font-family: Arial, Helvetica, Sans-serif;
+}
+
+body {
+  background-color: lightBlue;
 }
 
 /**
