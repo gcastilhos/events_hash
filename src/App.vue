@@ -64,7 +64,7 @@ import mock_data from '@/mock_data.js'
 Vue.use(VueRouter);
 
 const DATA_API_URI = process.env.VUE_APP_DATA_API_URI || "/events";
-const HEADERS = JSON.parse(process.env.VUE_APP_HEADERS)
+const HEADERS = JSON.parse(process.env.VUE_APP_HEADERS || "{}")
 
 var router = new VueRouter({
   mode: 'history',
